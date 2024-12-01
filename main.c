@@ -21,6 +21,14 @@ float getSDot(float* a, float* b, int n) {
     return total;
 }
 
+void verify(float cResult, float asmResult) {
+    if (cResult == asmResult) {
+        printf("Outputs are correct!\n");
+    }
+    else
+        printf("Output is incorrect.\n");
+}
+
 int main() {
     size_t ARRAY_SIZE;
     srand((unsigned int)time(NULL));
@@ -60,21 +68,24 @@ int main() {
 
             // C kernel
             start = clock();
-            float sdot = getSDot(a, b, ARRAY_SIZE);
+            float sdotC = getSDot(a, b, ARRAY_SIZE);
             end = clock();
             time_taken = ((double)(end - start)) * 1000 / CLOCKS_PER_SEC;
-            printf("[C] SDot: %f\n", sdot);
-            printf("Dot product using C took: %.6lf seconds\n", time_taken);
+            printf("[C] SDot: %f\n", sdotC);
+            printf("Dot product using C took: %.6lf ms\n", time_taken);
             c_avg_time[i] += time_taken;
 
             // x86-64 kernel
             start = clock();
-            sdot = getSDotx64(a, b, ARRAY_SIZE);
+            float sdotAsm = getSDotx64(a, b, ARRAY_SIZE);
             end = clock();
             time_taken = ((double)(end - start)) * 1000 / CLOCKS_PER_SEC;
-            printf("[x86-64] SDot: %f\n", sdot);
-            printf("Dot product using x86-64 took: %.6lf seconds\n", time_taken);
+            printf("[x86-64] SDot: %f\n", sdotAsm);
+            printf("Dot product using x86-64 took: %.6lf ms\n", time_taken);
             asm_avg_time[i] += time_taken;
+
+            //check
+            verify(sdotC, sdotAsm);
 
             printf("------------------------------------------------------\n");
         }
@@ -86,8 +97,8 @@ int main() {
         printf("\n=====================================================\n");
         printf("   AVERAGE EXECUTION TIMES FOR VECTOR SIZE 2^%d   \n", pow_values[i]);
         printf("=====================================================\n");
-        printf("[C] Average Execution time: %.6lf seconds\n", c_avg_time[i]);
-        printf("[x86-64] Average Execution time: %.6lf seconds\n", asm_avg_time[i]);
+        printf("[C] Average Execution time: %.6lf ms\n", c_avg_time[i]);
+        printf("[x86-64] Average Execution time: %.6lf ms\n", asm_avg_time[i]);
 
         // Free the allocated memory
         free(a);
@@ -100,8 +111,8 @@ int main() {
     printf("=================================================================\n");
     for (int i = 0; i < 3; i++) {
         printf("\nFor Vector Size 2^%d:\n", pow_values[i]);
-        printf("[C] Average Execution time: %.6lf seconds\n", c_avg_time[i]);
-        printf("[x86-64] Average Execution time: %.6lf seconds\n", asm_avg_time[i]);
+        printf("[C] Average Execution time: %.6lf ms\n", c_avg_time[i]);
+        printf("[x86-64] Average Execution time: %.6lf ms\n", asm_avg_time[i]);
         printf("-----------------------------------------------------------------\n");
     }
 
