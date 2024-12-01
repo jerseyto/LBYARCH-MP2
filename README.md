@@ -4,6 +4,8 @@
 
 COMPARISON AND ANALYSIS OF EXECUTION TIME AND PERFORMANCE OF KERNELS
 
+Link to our demo video: https://drive.google.com/file/d/1Nfdyk_XDHr0D4k_hOYcx9kw28qGkrkG4/view?usp=sharing
+
 This program evaluates and compares the execution times of kernel operations that compute the dot product of two vectors using C and x86-64 assembly language. The program measures performance across varying vector sizes (2²⁰, 2²⁴, and 2²⁸), with the largest size reduced from the initial target of 2³⁰ due to system limitations. Each kernel is executed 20 times per vector size, amounting to 60 test cases in total. The results highlight key differences between the two implementations, with average execution times computed to emphasize performance trends.
 
 In debug mode, the assembly implementation consistently outperforms the C implementation. For a vector size of 2²⁰, the C implementation averages 4.65 ms, while assembly achieves a significantly faster 1.30 ms. As the vector size increases, the difference becomes more pronounced. For 2²⁴, C has an average execution 78.55 ms, while assembly runs at an average of 20.10 ms. For 2²⁸, C averages 983.35 ms, while assembly reduces this to 247.90 ms. These results reflect the inherent efficiency of assembly, which minimizes overhead by directly leveraging hardware capabilities. In contrast, C suffers from runtime checks and additional abstractions in debug mode, which diminish its performance.
